@@ -1,0 +1,166 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    background: rgb(254,252,234); /* Old browsers */
+    background: -moz-linear-gradient(top, rgb(254,252,234) 0%, rgb(241,218,54) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgb(254,252,234) 0%,rgb(241,218,54) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgb(254,252,234) 0%,rgb(241,218,54) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefcea', endColorstr='#f1da36',GradientType=0 ); /* IE6-9 */
+}
+
+/* Components*/
+#gui{
+    display: flex;
+    flex-direction: row;
+}
+
+#menu{
+    width: 40vw;
+    height: 100vh;
+}
+
+#cookieSide{
+    width: 60vw;
+    height: 100vh;
+}
+
+
+/* === Left side === */
+
+/*images*/
+.img{
+    height: 100px;
+    width: 100px;
+}
+
+.img:active{
+    height: 90px;
+    width: 90px;
+    margin: 5px;
+}
+
+/*Rows*/
+
+.row:first-of-type{
+    margin-top: 200px;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+    margin-left: 150px;
+    margin-top: 25px;
+    height: 100px;
+}
+
+/*number of bought improvements*/
+.row p{
+    font-size: 80px;
+    padding-top: 10px;
+    margin-right: 10px;
+    color: blue;
+    height: 100px;
+}
+
+/*cost of improvement*/
+.row div p:first-of-type{
+    font-size: 60px;
+    padding-top: 20px;
+    margin-left: 10px;
+    color: black;
+    height: 80px;
+}
+
+/*income by improvement*/
+.row div p:nth-of-type(2){
+    font-size: 16px;
+    padding-top: 4px;
+    margin-left: 14px;
+    color: black;
+    height: 20px;
+}
+
+/* === Right side === */
+
+/*image - big cookie */
+#cookieImage{
+    height: 400px;
+    width: 400px;
+}
+
+#cookieImage:active{
+    height: 380px;
+    width: 380px;
+    margin: 10px;
+}
+
+#bigCookie{
+    margin-top: 50px;
+}
+
+
+/*information's*/
+#cookieSide div{
+    text-align: center;
+}
+
+/*Information abouts produce per second*/
+#cookieSide p:first-of-type{
+    margin-top: 100px;
+    font-size: 40px;
+}
+
+/*Number of cookies*/
+#cookieSide p:nth-of-type(2){
+    margin-top: 100px;
+    font-size: 100px;
+}
+
+/*Button "new game"*/
+#newGameBtn {
+    height: 50px;
+    width: 150px;
+    margin-top: 50px;
+    border-top: 1px solid #96d1f8;
+    cursor: pointer;
+    background: #65a9d7;
+    background: -webkit-gradient(linear, left top, left bottom, from(#3e779d), to(#65a9d7));
+    background: -webkit-linear-gradient(top, #3e779d, #65a9d7);
+    background: -moz-linear-gradient(top, #3e779d, #65a9d7);
+    background: -ms-linear-gradient(top, #3e779d, #65a9d7);
+    background: -o-linear-gradient(top, #3e779d, #65a9d7);
+    padding: 5px 10px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+    -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+    box-shadow: rgba(0,0,0,1) 0 1px 0;
+    text-shadow: rgba(0,0,0,.4) 0 1px 0;
+    color: white;
+    font-size: 14px;
+    font-family: Georgia, serif;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+#newGameBtn:hover {
+    border-top-color: #28597a;
+    background: #28597a;
+    color: #ccc;
+}
+
+#newGameBtn:active {
+    border-top-color: #1b435e;
+    background: #1b435e;
+}
+
+#newGameBtn:focus{
+    outline: none;
+}
+

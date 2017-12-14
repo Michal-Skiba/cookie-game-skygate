@@ -2,7 +2,7 @@
   "name": "skygate",
   "version": "1.0.0",
   "description": "task recruitment",
-  "main": "index.js",
+  "main": "./js/app.js",
   "scripts": {
     "test": "./node_modules/.bin/jasmine",
     "j-init": "./node_modules/.bin/jasmine init"
