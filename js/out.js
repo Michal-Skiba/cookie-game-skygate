@@ -74,6 +74,7 @@ var numberOfCookies = document.getElementById('cookieCalc');
 var cookieImg = document.getElementById('cookieImage');
 var incomePerS = document.getElementById('income');
 var images = document.getElementsByClassName('img');
+var newGame = document.getElementById('newGameBtn');
 var bagForRest = 0;
 
 // Cursor properties
@@ -116,11 +117,11 @@ var addIncome = function addIncome(add, actual) {
 };
 
 //tabs with properties
-
+var firstPrices = [15, 100, 1100, 12000, 130000];
 var prices = [cursorPrice, grandmaPrice, farmPrice, bakeryPrice, minePrice];
 var counters = [cursorCounter, grandmaCounter, farmCounter, bakeryCounter, mineCounter];
 var incomes = [cursorIncome, grandmaIncome, farmIncome, bakeryIncome, mineIncome];
-var incomesValue = [0.1, 1, 2, 5, 7]; // Values of incomes - if need to change do it only here
+var incomesValue = [0.1, 1, 8, 47, 260]; // Values of incomes - if need to change do it only here
 
 //main function to init game
 var init = function init() {
@@ -162,11 +163,24 @@ var intervalAddIncome = function intervalAddIncome() {
     }, 1000);
 }; // interval adding value per second
 
+//Clear all variables, need to start new game.
+var clearVariables = function clearVariables() {
+    for (var i = 0; i < images.length; i++) {
+        prices[i].innerText = firstPrices[i];
+        counters[i].innerText = 0;
+        incomes[i].innerText = 0;
+    }
+    incomePerS.innerText = 0;
+    numberOfCookies.innerText = 0;
+};
 
-intervalAddIncome();
+newGame.addEventListener('click', function () {
+    clearVariables();
+});
 
 document.addEventListener("DOMContentLoaded", function () {
     init();
+    intervalAddIncome();
 });
 
 /***/ })

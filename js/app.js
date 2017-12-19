@@ -2,6 +2,7 @@ const numberOfCookies = document.getElementById('cookieCalc');
 const cookieImg = document.getElementById('cookieImage');
 const incomePerS = document.getElementById('income');
 const images = document.getElementsByClassName('img');
+const newGame = document.getElementById('newGameBtn');
 let bagForRest = 0;
 
 // Cursor properties
@@ -26,7 +27,7 @@ const mineIncome = document.getElementById('mineIncome');
 const mineCounter = document.getElementById('mineCounter');
 
 // Simple add cookies by click
-cookieImg.addEventListener("click", function () {
+cookieImg.addEventListener("click",  () => {
     numberOfCookies.innerText++;
 });
 
@@ -42,11 +43,11 @@ let addIncome = (add, actual) => {
 };
 
 //tabs with properties
-
+let firstPrices = [15, 100, 1100, 12000, 130000];
 let prices = [cursorPrice, grandmaPrice, farmPrice, bakeryPrice, minePrice];
 let counters = [cursorCounter, grandmaCounter, farmCounter, bakeryCounter, mineCounter];
 let incomes = [cursorIncome, grandmaIncome, farmIncome, bakeryIncome, mineIncome];
-let incomesValue = [0.1, 1, 2, 5, 7]; // Values of incomes - if need to change do it only here
+let incomesValue = [0.1, 1, 8, 47, 260]; // Values of incomes - if need to change do it only here
 
 //main function to init game
 let init = ()=>{
@@ -80,10 +81,23 @@ let calculateIncome = () =>{
 
 let intervalAddIncome = ()=>{setInterval(() => (calculateIncome()), 1000)}; // interval adding value per second
 
+//Clear all variables, need to start new game.
+let clearVariables = ()=>{
+    for (let i=0; i<images.length; i++){
+        prices[i].innerText = firstPrices[i];
+        counters[i].innerText = 0;
+        incomes[i].innerText = 0;
+    }
+    incomePerS.innerText = 0;
+    numberOfCookies.innerText = 0;
+};
 
-intervalAddIncome();
+newGame.addEventListener('click', () =>{
+   clearVariables()
+});
 
 document.addEventListener("DOMContentLoaded", function() {
     init();
+    intervalAddIncome();
 });
 
