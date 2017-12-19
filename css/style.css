@@ -36,6 +36,7 @@ body{
 .img{
     height: 100px;
     width: 100px;
+    position: relative;
 }
 
 .img:active{
@@ -53,18 +54,18 @@ body{
 .row{
     display: flex;
     flex-direction: row;
-    margin-left: 150px;
+    margin-left: 100px;
     margin-top: 25px;
     height: 100px;
 }
 
 /*number of bought improvements*/
-.row p{
-    font-size: 80px;
-    padding-top: 10px;
-    margin-right: 10px;
+.counter{
+    font-size: 60px;
+    padding-top: 20px;
     color: blue;
     height: 100px;
+    width: 100px;
 }
 
 /*cost of improvement*/
@@ -163,4 +164,3 @@ body{
 #newGameBtn:focus{
     outline: none;
 }
-
