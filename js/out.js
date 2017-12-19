@@ -73,29 +73,26 @@
 var numberOfCookies = document.getElementById('cookieCalc');
 var cookieImg = document.getElementById('cookieImage');
 var incomePerS = document.getElementById('income');
+var images = document.getElementsByClassName('img');
+var bagForRest = 0;
 
 // Cursor properties
-var cursorImg = document.getElementById('cursor');
 var cursorPrice = document.getElementById('cursorPrice');
 var cursorIncome = document.getElementById('cursorIncome');
 var cursorCounter = document.getElementById('cursorCounter');
 // Grandma properties
-var grandmaImg = document.getElementById('grandma');
 var grandmaPrice = document.getElementById('grandmaPrice');
 var grandmaIncome = document.getElementById('grandmaIncome');
 var grandmaCounter = document.getElementById('grandmaCounter');
 // Farm properties
-var farmImg = document.getElementById('farm');
 var farmPrice = document.getElementById('farmPrice');
 var farmIncome = document.getElementById('farmIncome');
 var farmCounter = document.getElementById('farmCounter');
 // Bakery properties
-var bakeryImg = document.getElementById('bakery');
 var bakeryPrice = document.getElementById('bakeryPrice');
 var bakeryIncome = document.getElementById('bakeryIncome');
 var bakeryCounter = document.getElementById('bakeryCounter');
 // Mine properties
-var mineImg = document.getElementById('mine');
 var minePrice = document.getElementById('minePrice');
 var mineIncome = document.getElementById('mineIncome');
 var mineCounter = document.getElementById('mineCounter');
@@ -110,7 +107,6 @@ var incomeCounter = function incomeCounter() {
     var result = Number(mineIncome.innerText) + Number(bakeryIncome.innerText) + Number(farmIncome.innerText) + Number(grandmaIncome.innerText) + Number(cursorIncome.innerText);
     return incomePerS.innerText = result;
 };
-
 var addPrice = function addPrice(price) {
     return Math.floor(Number(price.innerText) * 1.15);
 };
@@ -119,58 +115,59 @@ var addIncome = function addIncome(add, actual) {
     return actual.innerText = (act + add).toFixed(2);
 };
 
-// Listener of cursor
-cursorImg.addEventListener("click", function () {
-    if (Number(numberOfCookies.innerText) >= Number(cursorPrice.innerText)) {
-        numberOfCookies.innerText = numberOfCookies.innerText - cursorPrice.innerText; // pay for cursor
-        cursorPrice.innerText = addPrice(cursorPrice); //change price
-        addIncome(0.1, cursorIncome); // add income | Value of income of cursor
-        cursorCounter.innerText++; //change number of upgrades
-        incomeCounter();
-    }
-});
-// Listener of grandma
-grandmaImg.addEventListener("click", function () {
-    if (Number(numberOfCookies.innerText) >= Number(grandmaPrice.innerText)) {
-        numberOfCookies.innerText = numberOfCookies.innerText - grandmaPrice.innerText; // pay for cursor
-        grandmaPrice.innerText = addPrice(grandmaPrice); //change price
-        addIncome(1, grandmaIncome); // add income | Value of income of grandma
-        grandmaCounter.innerText++; //change number of upgrades
-        incomeCounter();
-    }
-});
-// Listener of  farm
-farmImg.addEventListener("click", function () {
-    if (Number(numberOfCookies.innerText) >= Number(farmPrice.innerText)) {
-        numberOfCookies.innerText = numberOfCookies.innerText - farmPrice.innerText; // pay for cursor
-        farmPrice.innerText = addPrice(farmPrice); //change price
-        addIncome(1, farmIncome); // add income | Value of income of farm
-        farmCounter.innerText++; //change number of upgrades
-        incomeCounter();
-    }
-});
-// Listener of bakery
-bakeryImg.addEventListener("click", function () {
-    if (Number(numberOfCookies.innerText) >= Number(bakeryPrice.innerText)) {
-        numberOfCookies.innerText = numberOfCookies.innerText - bakeryPrice.innerText; // pay for cursor
-        bakeryPrice.innerText = addPrice(bakeryPrice); //change price
-        addIncome(1, bakeryIncome); // add income | Value of income of bakery
-        bakeryCounter.innerText++; //change number of upgrades
-        incomeCounter();
-    }
-});
-// Listener of  mine
-mineImg.addEventListener("click", function () {
-    if (Number(numberOfCookies.innerText) >= Number(minePrice.innerText)) {
-        numberOfCookies.innerText = numberOfCookies.innerText - minePrice.innerText; // pay for cursor
-        minePrice.innerText = addPrice(minePrice); //change price
-        addIncome(1, mineIncome); // add income | Value of income of mine
-        mineCounter.innerText++; //change number of upgrades
-        incomeCounter();
-    }
-});
+//tabs with properties
 
-//let intPointer = setInterval(()=> (counter<=n)?console.log('hello'+counter++):clearInterval(intPointer), 500)
+var prices = [cursorPrice, grandmaPrice, farmPrice, bakeryPrice, minePrice];
+var counters = [cursorCounter, grandmaCounter, farmCounter, bakeryCounter, mineCounter];
+var incomes = [cursorIncome, grandmaIncome, farmIncome, bakeryIncome, mineIncome];
+var incomesValue = [0.1, 1, 2, 5, 7]; // Values of incomes - if need to change do it only here
+
+//main function to init game
+var init = function init() {
+    var _loop = function _loop(i) {
+        images[i].addEventListener('click', function () {
+            if (Number(numberOfCookies.innerText) >= Number(prices[i].innerText)) {
+                numberOfCookies.innerText = Number(numberOfCookies.innerText) - Number(prices[i].innerText);
+                prices[i].innerText = addPrice(prices[i]);
+                addIncome(incomesValue[i], incomes[i]);
+                incomeCounter();
+                counters[i].innerText++;
+            }
+        });
+    };
+
+    for (var i = 0; i < images.length; i++) {
+        _loop(i);
+    }
+};
+
+//Function calculate value to add per second cookies
+var calculateIncome = function calculateIncome() {
+    var add = Number(numberOfCookies.innerText) + Number(incomePerS.innerText);
+    var restOfadd = Number(incomePerS.innerText) - Math.floor(Number(incomePerS.innerText));
+    bagForRest = bagForRest + restOfadd;
+    bagForRest.toFixed(2);
+    console.log(bagForRest.toFixed(2));
+    if (bagForRest >= 1) {
+        console.log("tutaj");
+        add = add + 1;
+        bagForRest = bagForRest - 1;
+    }
+    numberOfCookies.innerText = Math.floor(add);
+};
+
+var intervalAddIncome = function intervalAddIncome() {
+    setInterval(function () {
+        return calculateIncome();
+    }, 1000);
+}; // interval adding value per second
+
+
+intervalAddIncome();
+
+document.addEventListener("DOMContentLoaded", function () {
+    init();
+});
 
 /***/ })
 /******/ ]);
