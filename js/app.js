@@ -98,12 +98,12 @@ newGame.addEventListener('click', () =>{
 
 // ========== indexedDB =============
 
+
 let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 
 if (!window.indexedDB) {
     window.alert("Your browser doesn't support a stable version of IndexedDB so i cant save your game")
 }
-
 let db;
 let request = window.indexedDB.open("Database", 1); //create new database
 
@@ -116,220 +116,93 @@ request.onsuccess = function(event) {
     console.log("success: "+ db);
 };
 
-/*
-function remove() {
-    let request = db.transaction(["variables"], "readwrite")
-        .objectStore("variables")
-        .delete("1");
+const accessTab = [numberOfCookies, incomePerS, cursorCounter, cursorPrice, cursorIncome, grandmaCounter, grandmaPrice,
+    grandmaIncome, farmCounter, farmPrice, farmIncome, bakeryCounter, bakeryPrice, bakeryIncome, mineCounter, minePrice, mineIncome]
+let variablesTab;
 
-    request.onsuccess = function(event) {
-        console.log('del');
-    };
-}
-*/
+
+
 request.onupgradeneeded = (event) =>{
-        let db = event.target.result;
-        let objectStore = db.createObjectStore("variables", {keyPath: "id"});
-        console.log('save2');
-        let employeeData = [
-            { id: "1", variable: Number(numberOfCookies.innerText) },
-            { id: "2", variable: Number(incomePerS.innerText) }
+    let db = event.target.result;
+    let objectStore = db.createObjectStore("variables", {keyPath: "id"});
+    console.log('save2');
+    let employeeData = [
+        {id: "0", name: "CookiesNumber", variable: Number(numberOfCookies.innerText) },
+        {id: "1", name: "IncomePerSecond", variable: Number(incomePerS.innerText) },
+        {id: "2", name: "NumberOfCursors", variable: Number(cursorCounter.innerText) },
+        {id: "3", name: "CursorPrice", variable: Number(cursorPrice.innerText) },
+        {id: "4", name: "CursorIncome", variable: Number(cursorIncome.innerText) },
+        {id: "5", name: "NumberOfGrandmas", variable: Number(grandmaCounter.innerText) },
+        {id: "6", name: "GrandmaPrice", variable: Number(grandmaPrice.innerText) },
+        {id: "7", name: "GrandmaIncome", variable: Number(grandmaIncome.innerText) },
+        {id: "8", name: "NumberOfFarms", variable: Number(farmCounter.innerText) },
+        {id: "9", name: "FarmPrice", variable: Number(farmPrice.innerText) },
+        {id: "10", name: "FarmIncome", variable: Number(farmIncome.innerText) },
+        {id: "11", name: "NumberOfBakeries", variable: Number(bakeryCounter.innerText) },
+        {id: "12", name: "BakeryPrice", variable: Number(bakeryPrice.innerText) },
+        {id: "13", name: "BakeryIncome", variable: Number(bakeryIncome.innerText) },
+        {id: "14", name: "NumberOfMines", variable: Number(mineCounter.innerText) },
+        {id: "15", name: "MinePrice", variable: Number(minePrice.innerText) },
+        {id: "16", name: "MineIncome", variable: Number(mineIncome.innerText) }
         ];
-        for (let i in employeeData) {
-            objectStore.add(employeeData[i]);
-        }
+    for (let i in employeeData) {
+        objectStore.add(employeeData[i]);
+    }
 };
+
 
 let update = () =>{
-    console.log("gogo");
-    var objectStore = db.transaction(["variables"], "readwrite").objectStore("variables");
-    var request = objectStore.get("1");
-    request.onerror = function(event) {
-        // Handle errors!
-    };
-    request.onsuccess = function(event) {
-        // Get the old value that we want to update
-        var data = event.target.result;
-
-        // update the value(s) in the object that you want to change
-        data.variable = Number(numberOfCookies.innerText);
-
-        // Put this updated object back into the database.
-        var requestUpdate = objectStore.put(data);
-        requestUpdate.onerror = function(event) {
-            console.log("dzała")
+    variablesTab = [Number(numberOfCookies.innerText), Number(incomePerS.innerText), Number(cursorCounter.innerText),
+        Number(cursorPrice.innerText), Number(cursorIncome.innerText), Number(grandmaCounter.innerText), Number(grandmaPrice.innerText),
+        Number(grandmaIncome.innerText), Number(farmCounter.innerText), Number(farmPrice.innerText), Number(farmIncome.innerText),
+        Number(bakeryCounter.innerText), Number(bakeryPrice.innerText), Number(bakeryIncome.innerText), Number(mineCounter.innerText),
+        Number(minePrice.innerText), Number(mineIncome.innerText)];
+    let objectStore = db.transaction(["variables"], "readwrite").objectStore("variables");
+    for(let i=0; i<variablesTab.length; i++) {
+        let request = objectStore.get(`${i}`);
+        request.onsuccess = function (event) {
+            let data = event.target.result;
+            data.variable = variablesTab[i];
+            var requestUpdate = objectStore.put(data);
+            requestUpdate.onerror = function (event) {
+            };
+            requestUpdate.onsuccess = function (event) {
+                console.log(i)
+            };
         };
-        requestUpdate.onsuccess = function(event) {
-            console.log("nie działa")
-        };
-    };
-};
-let update2 = () =>{
-    console.log("gogo");
-    var objectStore = db.transaction(["variables"], "readwrite").objectStore("variables");
-    var request = objectStore.get("2");
-    request.onerror = function(event) {
-        // Handle errors!
-    };
-    request.onsuccess = function(event) {
-        // Get the old value that we want to update
-        var data = event.target.result;
-
-        // update the value(s) in the object that you want to change
-        data.variable = Number(incomePerS.innerText);
-        console.log(Number(incomePerS.innerText));
-
-        // Put this updated object back into the database.
-        var requestUpdate = objectStore.put(data);
-        requestUpdate.onerror = function(event) {
-            console.log("dzała")
-        };
-        requestUpdate.onsuccess = function(event) {
-            console.log("nie działa")
-        };
-    };
+    }
 };
 
-let upt = ()=>{
-    update();
-    update2();
+let read = () =>{
+    let transaction = db.transaction(["variables"]);
+    let objectStore = transaction.objectStore("variables");
+    console.log("gggggggggggggggggggggg");
+    for(let i=0; i<accessTab.length; i++) {
+        console.log("pętlaaaaaaaaaaaaaaaaaaaaaaaaa");
+        let request = objectStore.get(`${i}`);
+        request.onerror = function (event) {
+            console.log("ERRR")
+        };
+        request.onsuccess = function (event) {
+            console.log(request.result.variable);
+            accessTab[i].innerText = request.result.variable;
+        };
+    }
 };
 
-function read() {
-    var transaction = db.transaction(["variables"]);
-    var objectStore = transaction.objectStore("variables");
-    var request = objectStore.get("1");
-    request.onerror = function(event) {
-        console.log("errorrrr")
-    };
-    request.onsuccess = function(event) {
-        console.log("działaaa kurwa");
-        numberOfCookies.innerText = request.result.variable
-    };
-}
-
-function read2() {
-    var transaction = db.transaction(["variables"]);
-    var objectStore = transaction.objectStore("variables");
-    var request = objectStore.get("2");
-    request.onerror = function(event) {
-        console.log("errorrrr")
-    };
-    request.onsuccess = function(event) {
-        console.log("działaaa kurwa");
-        incomePerS.innerText = request.result.variable
-    };
-}
-
-let intervalAddIncome2 = ()=>{setInterval(() => (upt()), 5000)};
+let intervalAddIncome2 = ()=>{setInterval(() => (update()), 5000)};
 intervalAddIncome2();
 
 var x = document.getElementById('load');
 
 x.addEventListener('click', function () {
     read();
-    read2()
 });
+
 
 
 document.addEventListener("DOMContentLoaded", function() {
     init();
     intervalAddIncome();
+
 });
-//cookieImg.addEventListener('click', function () {
-//    update();
-
-//});
-
-/*
-var objectStore = db.transaction(["customers"], "readwrite").objectStore("customers");
-var request = objectStore.get("444-44-4444");
-request.onerror = function(event) {
-    // Handle errors!
-};
-request.onsuccess = function(event) {
-    // Get the old value that we want to update
-    var data = event.target.result;
-
-    // update the value(s) in the object that you want to change
-    data.age = 42;
-
-    // Put this updated object back into the database.
-    var requestUpdate = objectStore.put(data);
-    requestUpdate.onerror = function(event) {
-        // Do something with the error
-    };
-    requestUpdate.onsuccess = function(event) {
-        // Success - the data is updated!
-    };
-};
-*/
-//let intervalAddIncome2 = ()=>{setInterval(() => (saveGame()), 10000)};
-
-//intervalAddIncome2();
-/*
-let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-
-let request = window.indexedDB.open("MyDatabase", 3);
-
-console.log(request);
-
-request.onupgradeneeded = function (e) {
-    console.log("upg")
-};
-request.onerror = function (e) {
-    console.log("Error");
-};
-request.onsuccess = function (e) {
-    console.log("suc")
-};
-*/
-/*
-let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-
-if (!window.indexedDB) {
-    window.alert("Unfortunately, you can't save the game. You should update your browser");
-}
-
-let request = window.indexedDB.open("MyDatabase", 1),
-    db,
-    tx,
-    store,
-    index;
-
-request.onupgradeneeded = function (e) {
-  let db = request.result,
-  store = db.createObjectStore("QuestionStore",{
-      keyPath: "qID"});
-  index = store.createIndex("questionText", "questionTest", {unique:false});
-};
-
-request.onerror = function (e) {
-    console.log("Error" + e.target.errorCode);
-};
-
-request.onsuccess = function (e) {
-    db = request.result;
-    //tx = db.transaction("QuestionStore", "readwrite");
-    store = tx.objectStore("QuestionStore");
-    index = store.index("questionText");
-
-    db.onerror = function (e) {
-        console.log("Error" + e.target.errorCode);
-    };
-
-    let q1 = store.get(1);
-    let qs = index.get("The grass in green.");
-
-    q1.onsuccess = function () {
-        console.log(q1.result);
-        console.log(q1.result.questionTest);
-    };
-    tx.oncomplete = function () {
-        db.close();
-    };
-};
-
-
-
-*/
