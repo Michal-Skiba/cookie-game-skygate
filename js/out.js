@@ -178,37 +178,36 @@ newGame.addEventListener('click', function () {
 
 // ========== indexedDB =============
 
-
 var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 
 if (!window.indexedDB) {
     window.alert("Your browser doesn't support a stable version of IndexedDB so i cant save your game");
 }
+
 var db = void 0;
 var request = window.indexedDB.open("Database", 1); //create new database
 
-request.onerror = function (event) {
-    console.log("error: ");
-};
+request.onerror = function (event) {};
 
+//when request find database load a variables from data
 request.onsuccess = function (event) {
     db = request.result;
-    console.log("success: " + db);
+    read();
 };
 
+//Tab with access to DOM elements
 var accessTab = [numberOfCookies, incomePerS, cursorCounter, cursorPrice, cursorIncome, grandmaCounter, grandmaPrice, grandmaIncome, farmCounter, farmPrice, farmIncome, bakeryCounter, bakeryPrice, bakeryIncome, mineCounter, minePrice, mineIncome];
 var variablesTab = void 0;
 
 request.onupgradeneeded = function (event) {
     var db = event.target.result;
     var objectStore = db.createObjectStore("variables", { keyPath: "id" });
-    console.log('save2');
     var employeeData = [{ id: "0", name: "CookiesNumber", variable: Number(numberOfCookies.innerText) }, { id: "1", name: "IncomePerSecond", variable: Number(incomePerS.innerText) }, { id: "2", name: "NumberOfCursors", variable: Number(cursorCounter.innerText) }, { id: "3", name: "CursorPrice", variable: Number(cursorPrice.innerText) }, { id: "4", name: "CursorIncome", variable: Number(cursorIncome.innerText) }, { id: "5", name: "NumberOfGrandmas", variable: Number(grandmaCounter.innerText) }, { id: "6", name: "GrandmaPrice", variable: Number(grandmaPrice.innerText) }, { id: "7", name: "GrandmaIncome", variable: Number(grandmaIncome.innerText) }, { id: "8", name: "NumberOfFarms", variable: Number(farmCounter.innerText) }, { id: "9", name: "FarmPrice", variable: Number(farmPrice.innerText) }, { id: "10", name: "FarmIncome", variable: Number(farmIncome.innerText) }, { id: "11", name: "NumberOfBakeries", variable: Number(bakeryCounter.innerText) }, { id: "12", name: "BakeryPrice", variable: Number(bakeryPrice.innerText) }, { id: "13", name: "BakeryIncome", variable: Number(bakeryIncome.innerText) }, { id: "14", name: "NumberOfMines", variable: Number(mineCounter.innerText) }, { id: "15", name: "MinePrice", variable: Number(minePrice.innerText) }, { id: "16", name: "MineIncome", variable: Number(mineIncome.innerText) }];
     for (var i in employeeData) {
         objectStore.add(employeeData[i]);
     }
 };
-
+//Load variables to database
 var update = function update() {
     variablesTab = [Number(numberOfCookies.innerText), Number(incomePerS.innerText), Number(cursorCounter.innerText), Number(cursorPrice.innerText), Number(cursorIncome.innerText), Number(grandmaCounter.innerText), Number(grandmaPrice.innerText), Number(grandmaIncome.innerText), Number(farmCounter.innerText), Number(farmPrice.innerText), Number(farmIncome.innerText), Number(bakeryCounter.innerText), Number(bakeryPrice.innerText), Number(bakeryIncome.innerText), Number(mineCounter.innerText), Number(minePrice.innerText), Number(mineIncome.innerText)];
     var objectStore = db.transaction(["variables"], "readwrite").objectStore("variables");
@@ -231,19 +230,15 @@ var update = function update() {
     }
 };
 
+//Load variables from database
 var read = function read() {
     var transaction = db.transaction(["variables"]);
     var objectStore = transaction.objectStore("variables");
-    console.log("gggggggggggggggggggggg");
 
     var _loop3 = function _loop3(i) {
-        console.log("pętlaaaaaaaaaaaaaaaaaaaaaaaaa");
         var request = objectStore.get('' + i);
-        request.onerror = function (event) {
-            console.log("ERRR");
-        };
+        request.onerror = function (event) {};
         request.onsuccess = function (event) {
-            console.log(request.result.variable);
             accessTab[i].innerText = request.result.variable;
         };
     };
@@ -253,22 +248,17 @@ var read = function read() {
     }
 };
 
-var intervalAddIncome2 = function intervalAddIncome2() {
+//Save game every 3 seconds
+var save = function save() {
     setInterval(function () {
         return update();
-    }, 5000);
+    }, 3000);
 };
-intervalAddIncome2();
-
-var x = document.getElementById('load');
-
-x.addEventListener('click', function () {
-    read();
-});
 
 document.addEventListener("DOMContentLoaded", function () {
     init();
     intervalAddIncome();
+    save();
 });
 
 /***/ })

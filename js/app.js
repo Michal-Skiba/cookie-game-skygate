@@ -94,38 +94,34 @@ newGame.addEventListener('click', () =>{
    clearVariables()
 });
 
-
-
 // ========== indexedDB =============
-
 
 let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 
 if (!window.indexedDB) {
     window.alert("Your browser doesn't support a stable version of IndexedDB so i cant save your game")
 }
+
 let db;
 let request = window.indexedDB.open("Database", 1); //create new database
 
 request.onerror = function(event) {
-    console.log("error: ");
 };
 
+//when request find database load a variables from data
 request.onsuccess = function(event) {
     db = request.result;
-    console.log("success: "+ db);
+    read()
 };
 
+//Tab with access to DOM elements
 const accessTab = [numberOfCookies, incomePerS, cursorCounter, cursorPrice, cursorIncome, grandmaCounter, grandmaPrice,
     grandmaIncome, farmCounter, farmPrice, farmIncome, bakeryCounter, bakeryPrice, bakeryIncome, mineCounter, minePrice, mineIncome]
 let variablesTab;
 
-
-
 request.onupgradeneeded = (event) =>{
     let db = event.target.result;
     let objectStore = db.createObjectStore("variables", {keyPath: "id"});
-    console.log('save2');
     let employeeData = [
         {id: "0", name: "CookiesNumber", variable: Number(numberOfCookies.innerText) },
         {id: "1", name: "IncomePerSecond", variable: Number(incomePerS.innerText) },
@@ -149,8 +145,7 @@ request.onupgradeneeded = (event) =>{
         objectStore.add(employeeData[i]);
     }
 };
-
-
+//Load variables to database
 let update = () =>{
     variablesTab = [Number(numberOfCookies.innerText), Number(incomePerS.innerText), Number(cursorCounter.innerText),
         Number(cursorPrice.innerText), Number(cursorIncome.innerText), Number(grandmaCounter.innerText), Number(grandmaPrice.innerText),
@@ -163,7 +158,7 @@ let update = () =>{
         request.onsuccess = function (event) {
             let data = event.target.result;
             data.variable = variablesTab[i];
-            var requestUpdate = objectStore.put(data);
+            let requestUpdate = objectStore.put(data);
             requestUpdate.onerror = function (event) {
             };
             requestUpdate.onsuccess = function (event) {
@@ -173,36 +168,25 @@ let update = () =>{
     }
 };
 
+//Load variables from database
 let read = () =>{
     let transaction = db.transaction(["variables"]);
     let objectStore = transaction.objectStore("variables");
-    console.log("gggggggggggggggggggggg");
     for(let i=0; i<accessTab.length; i++) {
-        console.log("pętlaaaaaaaaaaaaaaaaaaaaaaaaa");
         let request = objectStore.get(`${i}`);
         request.onerror = function (event) {
-            console.log("ERRR")
         };
         request.onsuccess = function (event) {
-            console.log(request.result.variable);
             accessTab[i].innerText = request.result.variable;
         };
     }
 };
 
-let intervalAddIncome2 = ()=>{setInterval(() => (update()), 5000)};
-intervalAddIncome2();
-
-var x = document.getElementById('load');
-
-x.addEventListener('click', function () {
-    read();
-});
-
-
+//Save game every 3 seconds
+let save = ()=>{setInterval(() => (update()), 3000)};
 
 document.addEventListener("DOMContentLoaded", function() {
     init();
     intervalAddIncome();
-
+    save();
 });
