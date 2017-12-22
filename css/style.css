@@ -20,12 +20,12 @@ body{
 }
 
 #menu{
-    width: 40vw;
+    width: 50vw;
     height: 100vh;
 }
 
 #cookieSide{
-    width: 60vw;
+    width: 50vw;
     height: 100vh;
 }
 
@@ -70,8 +70,8 @@ body{
 
 /*cost of improvement*/
 .row div p:first-of-type{
-    font-size: 60px;
-    padding-top: 20px;
+    font-size: 40px;
+    padding-top: 30px;
     margin-left: 10px;
     color: black;
     height: 80px;
